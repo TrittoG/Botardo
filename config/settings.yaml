@@ -1,0 +1,43 @@
+tools:
+  yt_dlp_bin: "yt-dlp"
+  ffmpeg_bin: "ffmpeg"
+
+paths:
+  urls_file: "input/urls.txt"
+  downloads_dir: "output/downloads"
+  processed_dir: "output/processed"
+  ready_dir: "output/ready_to_upload"
+  metadata_csv: "output/metadata/titles.csv"
+  state_file: "state/processed_urls.json"
+
+video:
+  target_width: 1080
+  target_height: 1920
+  reframe_mode: "crop_center" # opciones: crop_center | blur_background
+  crf: 22
+  preset: "medium"
+  audio_bitrate: "128k"
+
+overlay:
+  enabled: true
+  max_chars: 90
+  wrap_width: 24
+  font_file: "" # ruta opcional absoluta a una fuente .ttf
+  font_size: 58
+  font_color: "white"
+  box: true
+  box_color: "black@0.45"
+  box_border: 16
+  x_expr: "(w-text_w)/2"
+  y_expr: "h*0.08"
+
+titles:
+  suggestions_count: 3
+  max_length: 95
+  hashtags:
+    - "#shorts"
+    - "#viral"
+    - "#tiktok"
+
+processing:
+  skip_if_processed: true

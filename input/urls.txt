@@ -1,0 +1,4 @@
+# Pega aqui una URL de tweet por linea.
+# Las lineas vacias o que empiecen con # se ignoran.
+# Ejemplo:
+# https://x.com/usuario/status/1234567890123456789
