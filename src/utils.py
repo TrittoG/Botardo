@@ -30,7 +30,8 @@ def require_success(result: subprocess.CompletedProcess[str], command: Sequence[
 def read_urls(urls_file: Path) -> List[str]:
     if not urls_file.exists():
         return []
-    lines = urls_file.read_text(encoding="utf-8").splitlines()
+    # utf-8-sig evita problemas con BOM generado por algunos editores en Windows.
+    lines = urls_file.read_text(encoding="utf-8-sig").splitlines()
     urls: List[str] = []
     for raw in lines:
         line = raw.strip()

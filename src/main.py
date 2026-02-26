@@ -44,6 +44,16 @@ def run_pipeline(config_path: str) -> None:
 
     yt_dlp_bin = str(_must_get(tools, "yt_dlp_bin"))
     ffmpeg_bin = str(_must_get(tools, "ffmpeg_bin"))
+    if shutil.which(yt_dlp_bin) is None:
+        raise FileNotFoundError(
+            f"No se encontro '{yt_dlp_bin}' en PATH. "
+            "En Windows puedes instalarlo con winget/choco o indicar ruta completa en config/settings.yaml."
+        )
+    if shutil.which(ffmpeg_bin) is None:
+        raise FileNotFoundError(
+            f"No se encontro '{ffmpeg_bin}' en PATH. "
+            "En Windows puedes instalarlo con winget/choco o indicar ruta completa en config/settings.yaml."
+        )
 
     urls_file = resolve_path(str(_must_get(paths, "urls_file")), project_root)
     downloads_dir = resolve_path(str(_must_get(paths, "downloads_dir")), project_root)

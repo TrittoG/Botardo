@@ -1,6 +1,6 @@
 tools:
-  yt_dlp_bin: "yt-dlp"
-  ffmpeg_bin: "ffmpeg"
+  yt_dlp_bin: "yt-dlp" # en Windows tambien puede ser "yt-dlp.exe" o ruta completa
+  ffmpeg_bin: "ffmpeg" # en Windows tambien puede ser "ffmpeg.exe" o ruta completa
 
 paths:
   urls_file: "input/urls.txt"
@@ -22,7 +22,7 @@ overlay:
   enabled: true
   max_chars: 90
   wrap_width: 24
-  font_file: "" # ruta opcional absoluta a una fuente .ttf
+  font_file: "" # ruta opcional absoluta a .ttf (ej Windows: C:/Windows/Fonts/arial.ttf)
   font_size: 58
   font_color: "white"
   box: true

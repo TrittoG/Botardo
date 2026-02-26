@@ -21,12 +21,35 @@ En macOS (Homebrew):
 brew install ffmpeg yt-dlp
 ```
 
+En Windows (PowerShell):
+
+```powershell
+winget install Gyan.FFmpeg
+winget install yt-dlp.yt-dlp
+```
+
+Alternativa con Chocolatey:
+
+```powershell
+choco install ffmpeg yt-dlp -y
+```
+
 ## Instalacion
+
+macOS/Linux:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+```
+
+Windows (PowerShell):
+
+```powershell
+py -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 ```
 
 ## Configuracion
@@ -36,12 +59,19 @@ Edita `config/settings.yaml`:
 - `video.reframe_mode`: `crop_center` o `blur_background`
 - `overlay.*`: estilo/posicion del texto
 - `titles.hashtags`: hashtags por defecto
+- `tools.yt_dlp_bin` y `tools.ffmpeg_bin`: en Windows puedes dejar `yt-dlp`/`ffmpeg` o poner ruta completa al `.exe`
 
 URLs a procesar en `input/urls.txt` (una por linea).
 
 ## Ejecucion
 
 ```bash
+python -m src.main --config config/settings.yaml
+```
+
+En Windows:
+
+```powershell
 python -m src.main --config config/settings.yaml
 ```
 
@@ -58,3 +88,4 @@ python -m src.main --config config/settings.yaml
 - El script evita reprocesar URLs ya tratadas (`processing.skip_if_processed: true`).
 - Esta version no publica automaticamente a YouTube/TikTok.
 - Si quieres cambiar fuente para overlay, define `overlay.font_file` con una ruta absoluta a `.ttf`.
+- En Windows usa formato de ruta con `/` para la fuente, por ejemplo: `C:/Windows/Fonts/arial.ttf`.

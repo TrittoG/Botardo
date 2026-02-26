@@ -15,6 +15,13 @@ def _escape_drawtext(value: str) -> str:
     return escaped
 
 
+def _escape_filter_value(value: str) -> str:
+    escaped = value.replace("\\", "/")
+    escaped = escaped.replace(":", r"\:")
+    escaped = escaped.replace("'", r"\'")
+    return escaped
+
+
 def build_overlay_text(raw_text: str, max_chars: int, wrap_width: int) -> str:
     base = clean_text(raw_text)
     base = truncate_text(base, max_chars)
@@ -31,8 +38,11 @@ def apply_text_overlay(
     output_video.parent.mkdir(parents=True, exist_ok=True)
     escaped = _escape_drawtext(text)
 
-    font_file = str(overlay_cfg.get("font_file", "") or "").strip()
-    font_arg = f":fontfile={font_file}" if font_file else ""
+    font_file_raw = str(overlay_cfg.get("font_file", "") or "").strip()
+    font_arg = ""
+    if font_file_raw:
+        font_file = _escape_filter_value(font_file_raw)
+        font_arg = f":fontfile='{font_file}'"
     box_enabled = bool(overlay_cfg.get("box", True))
     box_flag = "1" if box_enabled else "0"
 
