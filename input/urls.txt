@@ -2,3 +2,6 @@
 # Las lineas vacias o que empiecen con # se ignoran.
 # Ejemplo:
 # https://x.com/usuario/status/1234567890123456789
+https://x.com/AtaqueFutbolero/status/2027168578676367408?s=20
+https://x.com/footballxpert/status/2027187827335647461?s=20
+https://x.com/juegosimple__/status/2027188282749001894?s=20

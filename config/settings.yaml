@@ -1,5 +1,7 @@
 tools:
-  yt_dlp_bin: "yt-dlp" # en Windows tambien puede ser "yt-dlp.exe" o ruta completa
+  # ruta absoluta al ejecutable yt-dlp instalado por winget; se puede
+  # ajustar si lo mueves a otra carpeta o si prefieres instalarlo en PATH.
+  yt_dlp_bin: "C:/Users/Giuli/AppData/Local/Microsoft/WinGet/Packages/yt-dlp.yt-dlp_Microsoft.Winget.Source_8wekyb3d8bbwe/yt-dlp.exe"
   ffmpeg_bin: "ffmpeg" # en Windows tambien puede ser "ffmpeg.exe" o ruta completa
 
 paths:
