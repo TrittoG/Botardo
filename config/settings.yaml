@@ -24,16 +24,15 @@ video:
 
 overlay:
   enabled: true
-  max_chars: 90
-  wrap_width: 24
-  font_file: "" # ruta opcional absoluta a .ttf (ej Windows: C:/Windows/Fonts/arial.ttf)
-  font_size: 58
+  max_chars: 60
+  wrap_width: 20
+  font_file: "" # ruta opcional absoluta a .ttf (ej Windows: C:/Windows/Fonts/arialbd.ttf para bold)
+  font_size: 72
   font_color: "white"
-  box: true
-  box_color: "black@0.45"
-  box_border: 16
+  border_width: 4
+  border_color: "black"
   x_expr: "(w-text_w)/2"
-  y_expr: "h*0.08"
+  y_expr: "h*0.06"
 
 titles:
   suggestions_count: 3
