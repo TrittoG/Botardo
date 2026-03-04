@@ -4,7 +4,7 @@ import textwrap
 from pathlib import Path
 from typing import Dict
 
-from .utils import clean_text, require_success, run_command, truncate_text
+from .utils import clean_tweet_text, require_success, run_command, truncate_text
 
 
 def _escape_drawtext(value: str) -> str:
@@ -23,24 +23,20 @@ def _escape_filter_value(value: str) -> str:
 
 
 def build_overlay_text(raw_text: str, max_chars: int, wrap_width: int) -> str:
-    import re
+    """
+    Construye el texto del overlay limpiando el contenido del tweet.
+    Si el texto limpio es muy largo (> max_chars), devuelve vacío para no mostrar nada.
+    """
+    base = clean_tweet_text(raw_text)
 
-    base = clean_text(raw_text)
+    # Si después de limpiar el texto es muy largo, mejor no mostrar nada
+    if len(base) > max_chars:
+        return ""
 
-    # Eliminar nombre de usuario al principio (ej: "@usuario: texto" o "NombreUsuario: texto")
-    # Busca patrón de nombre/@ seguido de : al inicio
-    base = re.sub(r'^[@\w\s]+:\s*', '', base)
+    # Si el texto está vacío después de limpiar, no mostrar nada
+    if not base:
+        return ""
 
-    # Eliminar URLs
-    base = re.sub(r'https?://\S+', '', base)
-
-    # Eliminar menciones @usuario
-    base = re.sub(r'@\w+', '', base)
-
-    # Limpiar espacios múltiples
-    base = re.sub(r'\s+', ' ', base).strip()
-
-    base = truncate_text(base, max_chars)
     return textwrap.fill(base, width=wrap_width)
 
 

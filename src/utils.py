@@ -60,6 +60,39 @@ def clean_text(text: str) -> str:
     return value
 
 
+def clean_tweet_text(text: str) -> str:
+    """
+    Limpia el texto de un tweet de Twitter/X para extraer solo el contenido relevante.
+    Elimina nombres de usuario, URLs, menciones, hashtags, etc.
+    """
+    if not text:
+        return ""
+
+    value = text.strip()
+
+    # Eliminar nombre de usuario al principio (formatos: "Usuario: texto" o "@usuario: texto")
+    # Twitter a veces pone "NombreCompleto: texto" o "@handle: texto"
+    value = re.sub(r'^[^:]+:\s*', '', value, count=1)
+
+    # Eliminar URLs (http, https, t.co, etc.)
+    value = re.sub(r'https?://\S+', '', value)
+    value = re.sub(r't\.co/\S+', '', value)
+
+    # Eliminar menciones @usuario
+    value = re.sub(r'@\w+', '', value)
+
+    # Eliminar hashtags #palabra (opcional, comentar si quieres mantenerlos)
+    # value = re.sub(r'#\w+', '', value)
+
+    # Limpiar espacios múltiples y caracteres especiales residuales
+    value = re.sub(r'\s+', ' ', value).strip()
+
+    # Eliminar puntuación sobrante al inicio/final
+    value = value.strip('.,;:!? ')
+
+    return value
+
+
 def truncate_text(text: str, max_len: int) -> str:
     if len(text) <= max_len:
         return text

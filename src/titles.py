@@ -5,14 +5,22 @@ import re
 from pathlib import Path
 from typing import Dict, List, Sequence
 
-from .utils import clean_text, dedupe_keep_order, truncate_text
+from .utils import clean_tweet_text, dedupe_keep_order, truncate_text
 
 
 def _base_hook(text: str) -> str:
-    value = clean_text(text)
+    """
+    Limpia el texto del tweet para generar un título base.
+    Usa la misma lógica de limpieza que el overlay.
+    """
+    value = clean_tweet_text(text)
+
+    # Eliminar hashtags del título (opcional)
     value = re.sub(r"#\w+", "", value).strip()
+
     if not value:
         return "Video que vale la pena ver"
+
     return value
 
 
