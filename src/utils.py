@@ -63,16 +63,38 @@ def clean_text(text: str) -> str:
 def clean_tweet_text(text: str) -> str:
     """
     Limpia el texto de un tweet de Twitter/X para extraer solo el contenido relevante.
-    Elimina nombres de usuario, URLs, menciones, hashtags, etc.
+    Elimina nombres de usuario, URLs, menciones, emojis, etc.
     """
     if not text:
         return ""
 
     value = text.strip()
 
+    # Eliminar iniciales al principio (ej: "JS - texto" → "texto")
+    # Patrón: 1-4 letras mayúsculas seguidas de " - "
+    value = re.sub(r'^[A-Z]{1,4}\s*-\s*', '', value)
+
     # Eliminar nombre de usuario al principio (formatos: "Usuario: texto" o "@usuario: texto")
-    # Twitter a veces pone "NombreCompleto: texto" o "@handle: texto"
     value = re.sub(r'^[^:]+:\s*', '', value, count=1)
+
+    # Eliminar emojis (rangos Unicode de emojis)
+    # Incluye símbolos, pictogramas, símbolos de transporte, banderas, etc.
+    emoji_pattern = re.compile(
+        "["
+        "\U0001F600-\U0001F64F"  # emoticons
+        "\U0001F300-\U0001F5FF"  # símbolos & pictogramas
+        "\U0001F680-\U0001F6FF"  # transporte & símbolos de mapa
+        "\U0001F1E0-\U0001F1FF"  # banderas (iOS)
+        "\U00002702-\U000027B0"  # dingbats
+        "\U000024C2-\U0001F251"  # símbolos cerrados
+        "\U0001F900-\U0001F9FF"  # símbolos suplementarios
+        "\U0001FA70-\U0001FAFF"  # símbolos extendidos A
+        "\u2600-\u26FF"          # símbolos misceláneos
+        "\u2700-\u27BF"          # dingbats
+        "]+",
+        flags=re.UNICODE
+    )
+    value = emoji_pattern.sub('', value)
 
     # Eliminar URLs (http, https, t.co, etc.)
     value = re.sub(r'https?://\S+', '', value)
@@ -81,14 +103,14 @@ def clean_tweet_text(text: str) -> str:
     # Eliminar menciones @usuario
     value = re.sub(r'@\w+', '', value)
 
-    # Eliminar hashtags #palabra (opcional, comentar si quieres mantenerlos)
-    # value = re.sub(r'#\w+', '', value)
+    # Eliminar hashtags #palabra
+    value = re.sub(r'#\w+', '', value)
 
     # Limpiar espacios múltiples y caracteres especiales residuales
     value = re.sub(r'\s+', ' ', value).strip()
 
     # Eliminar puntuación sobrante al inicio/final
-    value = value.strip('.,;:!? ')
+    value = value.strip('.,;:!?… ')
 
     return value
 

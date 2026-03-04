@@ -30,26 +30,30 @@ def generate_title_suggestions(
     suggestions_count: int,
     max_length: int,
 ) -> List[str]:
+    """
+    Genera títulos sugeridos simples basados en el texto del tweet.
+    Primera sugerencia: solo el texto limpio
+    Otras sugerencias: variaciones simples
+    """
     hook = _base_hook(source_text)
     tags = " ".join(dedupe_keep_order([tag.strip() for tag in hashtags if tag.strip()]))
 
-    templates = [
-        "{hook}",
-        "No te lo pierdas: {hook}",
-        "Mira esto: {hook}",
-        "Top clip de hoy: {hook}",
-        "Esto se hizo viral: {hook}",
-    ]
+    # Título 1: Solo el texto limpio (sin hashtags)
+    title_1 = truncate_text(hook, max_length)
 
-    out: List[str] = []
-    for template in templates:
-        title = template.format(hook=hook).strip()
-        if tags:
-            title = f"{title} {tags}".strip()
-        out.append(truncate_text(title, max_length))
-        if len(out) >= suggestions_count:
-            break
-    return out
+    # Título 2: Texto con hashtags
+    title_2 = f"{hook} {tags}".strip() if tags else hook
+    title_2 = truncate_text(title_2, max_length)
+
+    # Título 3: Variación corta con un prefijo simple (solo si es diferente)
+    title_3 = f"Mirá: {hook}".strip()
+    title_3 = truncate_text(title_3, max_length)
+
+    # Eliminar duplicados manteniendo el orden
+    out = dedupe_keep_order([title_1, title_2, title_3])
+
+    # Retornar solo la cantidad solicitada
+    return out[:suggestions_count]
 
 
 def write_titles_csv(rows: List[Dict[str, str]], output_csv: Path, max_suggestions: int) -> None:
