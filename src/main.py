@@ -79,6 +79,7 @@ def run_pipeline(config_path: str) -> None:
     width = int(video_cfg.get("target_width", 1080))
     height = int(video_cfg.get("target_height", 1920))
     reframe_mode = str(video_cfg.get("reframe_mode", "crop_center"))
+    crop_scale = float(video_cfg.get("crop_scale", 1.0))
     crf = int(video_cfg.get("crf", 22))
     preset = str(video_cfg.get("preset", "medium"))
     audio_bitrate = str(video_cfg.get("audio_bitrate", "128k"))
@@ -110,6 +111,7 @@ def run_pipeline(config_path: str) -> None:
             width=width,
             height=height,
             mode=reframe_mode,
+            crop_scale=crop_scale,
             crf=crf,
             preset=preset,
             audio_bitrate=audio_bitrate,

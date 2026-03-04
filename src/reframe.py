@@ -5,11 +5,37 @@ from pathlib import Path
 from .utils import require_success, run_command
 
 
-def _crop_filter(width: int, height: int) -> str:
-    return (
-        f"scale={width}:{height}:force_original_aspect_ratio=increase,"
-        f"crop={width}:{height}"
-    )
+def _crop_filter(width: int, height: int, crop_scale: float = 1.0) -> str:
+    """
+    Crea un filtro de crop con zoom controlable.
+
+    Args:
+        width: Ancho objetivo (ej: 1080)
+        height: Alto objetivo (ej: 1920)
+        crop_scale: Factor de zoom (0.5-1.0).
+                   1.0 = crop completo (comportamiento original, sin barras negras)
+                   < 1.0 = menos zoom, muestra más contenido lateral con barras negras arriba/abajo
+
+    Ejemplos con video 1920x1080 horizontal a 1080x1920 vertical:
+        crop_scale=1.0: Escala a 3413x1920, crop a 1080x1920 (pierde contenido lateral)
+        crop_scale=0.8: Escala a 2730x1536, crop a 1080x1536, pad a 1080x1920 (barras negras 192px arriba/abajo)
+        crop_scale=0.6: Escala a 2048x1152, crop a 1080x1152, pad a 1080x1920 (barras negras 384px arriba/abajo)
+    """
+    if crop_scale >= 0.99:  # Comportamiento original: crop completo sin barras negras
+        return (
+            f"scale={width}:{height}:force_original_aspect_ratio=increase,"
+            f"crop={width}:{height}"
+        )
+    else:
+        # Calcular altura escalada según crop_scale
+        # Esto controla cuánto del frame vertical queremos llenar
+        scaled_height = int(height * crop_scale)
+
+        return (
+            f"scale={width}:{scaled_height}:force_original_aspect_ratio=increase,"
+            f"crop={width}:{scaled_height},"
+            f"pad={width}:{height}:0:(oh-ih)/2:black"
+        )
 
 
 def _blur_filter(width: int, height: int) -> str:
@@ -27,12 +53,13 @@ def reframe_to_vertical(
     width: int,
     height: int,
     mode: str,
+    crop_scale: float,
     crf: int,
     preset: str,
     audio_bitrate: str,
 ) -> None:
     output_video.parent.mkdir(parents=True, exist_ok=True)
-    vf = _blur_filter(width, height) if mode == "blur_background" else _crop_filter(width, height)
+    vf = _blur_filter(width, height) if mode == "blur_background" else _crop_filter(width, height, crop_scale)
 
     cmd = [
         ffmpeg_bin,

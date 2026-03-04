@@ -16,6 +16,7 @@ video:
   target_width: 1080
   target_height: 1920
   reframe_mode: "crop_center" # opciones: crop_center | blur_background
+  crop_scale: 1.0 # Factor de zoom para crop_center (0.5-1.0): 1.0=crop completo, valores menores muestran más contenido lateral con barras negras
   crf: 22
   preset: "medium"
   audio_bitrate: "128k"
